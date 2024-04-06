@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Switcher</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .profile-buttons {
+            display: flex;
+            justify-content: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .client-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .client-button:hover {
+            background-color: #45a049;
+        }
+        .police-button {
+            background-color: #007bff;
+            color: white;
+        }
+        .police-button:hover {
+            background-color: #0056b3;
+        }
+        .small-button {
+            font-size: 14px;
+            padding: 5px 10px;
+            margin-top: -30px;
+            margin-right: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Profile Switcher</h1>
+    <div class="profile-buttons">
+        <button class="client-button" onclick="switchToClient()">Citizen</button>
+        <button class="police-button" onclick="switchToPolice()">Police</button>
+        
+    </div>
+
+    <script>
+        function switchToClient() {
+            window.location.href = "citizen.html";
+        }
+
+        function switchToClient() {
+            window.location.href = "citizen.html";
+        }
+
+        async function switchToPolice() {
+            try {
+                // Create a Web3 instance
+                const web3 = new Web3(window.ethereum);
+
+        // Request accounts from MetaMask
+        const accounts = await web3.eth.requestAccounts();
+        
+        // Get the current address
+        const currentAddress = accounts[0].toLowerCase(); // Convert to lowercase
+        console.log(currentAddress)
+                // Contract ABI
+                const abi = [
+  {
+    "type": "constructor",
+    "name": "",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "_officer",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "complaintFiled",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "id",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "address",
+        "name": "complaintRegisteredBy",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "type": "string",
+        "name": "title",
+        "indexed": false,
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "function",
+    "name": "Complaints",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "id",
+        "internalType": "uint256"
+      },
+      {
+        "type": "address",
+        "name": "complaintRegisteredBy",
+        "internalType": "address"
+      },
+      {
+        "type": "string",
+        "name": "title",
+        "internalType": "string"
+      },
+      {
+        "type": "string",
+        "name": "description",
+        "internalType": "string"
+      },
+      {
+        "type": "string",
+        "name": "approvalRemark",
+        "internalType": "string"
+      },
+      {
+        "type": "string",
+        "name": "resolutionRemark",
+        "internalType": "string"
+      },
+      {
+        "type": "bool",
+        "name": "isApproved",
+        "internalType": "bool"
+      },
+      {
+        "type": "bool",
+        "name": "isResolved",
+        "internalType": "bool"
+      },
+      {
+        "type": "bool",
+        "name": "exists",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "approveComplaint",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_id",
+        "internalType": "uint256"
+      },
+      {
+        "type": "string",
+        "name": "_approvalRemark",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "calcPendingApprovalIds",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "calcPendingResolutionIds",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "calcResolvedIds",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "discardComplaint",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_id",
+        "internalType": "uint256"
+      },
+      {
+        "type": "string",
+        "name": "_approvalRemark",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "fileComplaint",
+    "inputs": [
+      {
+        "type": "string",
+        "name": "_title",
+        "internalType": "string"
+      },
+      {
+        "type": "string",
+        "name": "_description",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "nextId",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "officer",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "address",
+        "name": "",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "address",
+        "name": "",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "pendingApprovals",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "pendingResolutions",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "resolveComplaint",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_id",
+        "internalType": "uint256"
+      },
+      {
+        "type": "string",
+        "name": "_resolutionRemark",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "resolvedCases",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "setOfficerAddress",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "_officer",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  }
+];
+                // Contract address
+                const contractAddress = '0xF7A6790b4AFEC8bFa65c23f96916e7dd381d8db1';
+                
+                // Instantiate the contract
+                const contract = new web3.eth.Contract(abi, contractAddress);
+        
+        // Call the officer() method of the smart contract
+        const officerAddress = (await contract.methods.officer().call()).toLowerCase();
+        console.log(officerAddress)// Convert to lowercase
+        
+        // If officer address is set and matches the current address, redirect to police.html
+        if (officerAddress === currentAddress) {
+            window.location.href = "police.html";
+        } else {
+            throw new Error('Officer address not set or does not match. Cannot access police profile.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert(error.message);
+    }
+        }
+        
+    </script>
+    </script>
+</body>
+</html>
